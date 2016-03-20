@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         ServerSocket ssock = new ServerSocket(10000);
-        System.out.println("Liste");
+        System.out.println("Listening");
         while (true) {
             Socket sock = ssock.accept();
             System.out.println("Connected");
