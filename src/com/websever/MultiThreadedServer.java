@@ -1,5 +1,8 @@
 package com.websever;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -57,8 +60,25 @@ public class MultiThreadedServer implements Runnable {
     }
   }
 
-  private String processData(String request) {
-    return "RESULT";
+  private String processData(String requestBody) {
+    JSONObject obj = new JSONObject(requestBody);
+    JSONArray arr = obj.getJSONArray("expressions");
+
+    JSONObject response = new JSONObject();
+    JSONArray responseArray = new JSONArray();
+
+    for (int i = 0; i < arr.length(); i++) {
+      String expression = arr.getJSONObject(i).getString("expression");
+
+      float result = new Expression(expression).eval().floatValue();
+      JSONObject exprResponse =  new JSONObject();
+      exprResponse.put("expression", expression);
+      exprResponse.put("result", result);
+      responseArray.put(exprResponse);
+    }
+
+    response.put("expressions", responseArray);
+    return response.toString();
   }
 }
 
